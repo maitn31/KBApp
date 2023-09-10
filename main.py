@@ -54,15 +54,18 @@ class Window(QMainWindow):
         if self.timer_labels[index].text() != "Time":
             values = QtWidgets.QInputDialog.getText(
                 QDialog(), 'Edit Timer', 'Enter new time:')
+            print(values)
+            new_time = QTime()
             try:
                 parts = values[0].split(':')
                 formatted_parts = [f'{int(part):02}' for part in parts]
                 formatted_time_str = ':'.join(formatted_parts)
                 new_time = QTime.fromString(formatted_time_str, "hh:mm:ss")
             except ValueError:
-                print("Something went wrong")
+                print("Tieme is not valid")
             if new_time.isValid():
                 self.timer_labels[index].setText(new_time.toString("hh:mm:ss"))
+
 
         else:
             current_time = QTime.currentTime()

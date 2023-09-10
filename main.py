@@ -1,14 +1,15 @@
-from PyQt5.uic import loadUi
+import PyQt5.uic
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow
+from PyQt5 import QtWidgets
 import sys
 
 
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
-        loadUi("kbapp.ui", self)
+        PyQt5.uic.loadUi("kbapp.ui", self)
         self.setWindowTitle("KB Table Timer")
         self.timer_labels = []
         self.table_labels = []
@@ -43,25 +44,35 @@ class Window(QMainWindow):
             if checkout_button:
                 checkout_button.clicked.connect(lambda _, n=i: self.check_out(n - 1))
                 self.checkout_buttons.append(checkout_button)
-        print(self.timer_labels)
-        print(self.table_labels)
-        print(self.checkin_buttons)
-        print(self.checkout_buttons)
+
         # self.is_checked_in = [False] * 18
         self.show()
 
     def check_in(self, index):
         # if not self.is_checked_in[index]:
         # Get the current time and add 2 hours
-        current_time = QTime.currentTime()
-        future_time = current_time.addSecs(2 * 60 * 60)  # 2 hours in seconds
-        self.timer_labels[index].setText(future_time.toString("hh:mm:ss"))
-        # self.is_checked_in[index] = True
-        self.table_labels[index].setStyleSheet("background-color: green;")
+        if self.timer_labels[index].text() != "Time":
+            values = QtWidgets.QInputDialog.getText(
+                QDialog(), 'Edit Timer', 'Enter new time:')
+            try:
+                parts = values[0].split(':')
+                formatted_parts = [f'{int(part):02}' for part in parts]
+                formatted_time_str = ':'.join(formatted_parts)
+                new_time = QTime.fromString(formatted_time_str, "hh:mm:ss")
+            except ValueError:
+                print("Something went wrong")
+            if new_time.isValid():
+                self.timer_labels[index].setText(new_time.toString("hh:mm:ss"))
+
+        else:
+            current_time = QTime.currentTime()
+            future_time = current_time.addSecs(2 * 60 * 60)  # 2 hours in seconds
+            self.timer_labels[index].setText(future_time.toString("hh:mm:ss"))
+            # self.is_checked_in[index] = True
+            self.table_labels[index].setStyleSheet("background-color: green;")
 
     def check_out(self, index):
         self.timer_labels[index].setText("Time")
-        print("Hi")
         self.table_labels[index].setStyleSheet("")
 
     def update_timer(self):

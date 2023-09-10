@@ -41,6 +41,7 @@ class Window(QMainWindow):
             if checkin_button:
                 checkin_button.clicked.connect(lambda _, m=i: self.check_in(m - 1))
                 self.checkin_buttons.append(checkin_button)
+
             if checkout_button:
                 checkout_button.clicked.connect(lambda _, n=i: self.check_out(n - 1))
                 self.checkout_buttons.append(checkout_button)
@@ -62,10 +63,9 @@ class Window(QMainWindow):
                 formatted_time_str = ':'.join(formatted_parts)
                 new_time = QTime.fromString(formatted_time_str, "hh:mm:ss")
             except ValueError:
-                print("Tieme is not valid")
+                print("Time is not valid")
             if new_time.isValid():
                 self.timer_labels[index].setText(new_time.toString("hh:mm:ss"))
-
 
         else:
             current_time = QTime.currentTime()

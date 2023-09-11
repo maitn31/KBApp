@@ -61,7 +61,7 @@ class Window(QMainWindow):
                 parts = values[0].split(':')
                 formatted_parts = [f'{int(part):02}' for part in parts]
                 formatted_time_str = ':'.join(formatted_parts)
-                new_time = QTime.fromString(formatted_time_str, "hh:mm:ss")
+                new_time = QTime.fromString(formatted_time_str, "hh:mm")
             except ValueError:
                 print("Time is not valid")
             if new_time.isValid():
